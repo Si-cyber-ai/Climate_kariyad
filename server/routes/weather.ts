@@ -118,8 +118,8 @@ export const handleTodayWeather: RequestHandler = (req, res) => {
 
 export const handleWeatherHistory: RequestHandler = (req, res) => {
   try {
-    // This would typically include pagination, filtering, etc.
-    const sortedData = [...mockWeatherData].sort(
+    // Sort data by date (most recent first)
+    const sortedData = [...weatherDataStore].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
     );
 
