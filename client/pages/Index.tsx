@@ -146,11 +146,23 @@ export default function Index() {
           />
         </div>
 
-        {/* Last Updated */}
+        {/* Last Updated & Refresh */}
         <div className="text-center">
-          <p className="text-sm text-muted-foreground">
-            Last updated: {formatLastUpdated(weatherData.lastUpdated)}
-          </p>
+          <div className="flex items-center justify-center space-x-4 mb-4">
+            <p className="text-sm text-muted-foreground">
+              Last updated: {formatLastUpdated(weatherData.lastUpdated)}
+            </p>
+            <button
+              onClick={fetchWeatherData}
+              disabled={loading}
+              className="flex items-center space-x-1 px-3 py-1 text-sm border border-border rounded-md hover:bg-accent transition-colors disabled:opacity-50"
+            >
+              <RefreshCw
+                className={`w-3 h-3 ${loading ? "animate-spin" : ""}`}
+              />
+              <span>Refresh</span>
+            </button>
+          </div>
         </div>
 
         {/* School Information */}
