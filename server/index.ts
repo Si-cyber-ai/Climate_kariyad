@@ -27,6 +27,7 @@ export function createServer() {
   app.get("/api/weather/today", handleTodayWeather);
   app.get("/api/weather/history", handleWeatherHistory);
   app.post("/api/weather/add", handleAddWeatherData);
+  app.delete("/api/weather/delete/:id", handleDeleteWeatherData);
 
   return app;
 }
