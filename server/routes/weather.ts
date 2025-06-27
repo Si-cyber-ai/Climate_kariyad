@@ -137,12 +137,85 @@ export const handleWeatherHistory: RequestHandler = (req, res) => {
 
 export const handleAddWeatherData: RequestHandler = (req, res) => {
   try {
-    // This would validate the request body and save to database
-    // For now, just return success
+    const { date, rainfall, maxTemperature, minTemperature, humidity } =
+      req.body;
+
+    // Validate required fields
+    if (
+      !date ||
+      rainfall === undefined ||
+      maxTemperature === undefined ||
+      minTemperature === undefined ||
+      humidity === undefined
+    ) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    // Validate data types and ranges
+    if (
+      isNaN(rainfall) ||
+      isNaN(maxTemperature) ||
+      isNaN(minTemperature) ||
+      isNaN(humidity)
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Numeric values must be valid numbers" });
+    }
+
+    if (humidity < 0 || humidity > 100) {
+      return res
+        .status(400)
+        .json({ error: "Humidity must be between 0 and 100" });
+    }
+
+    if (minTemperature > maxTemperature) {
+      return res
+        .status(400)
+        .json({
+          error:
+            "Minimum temperature cannot be higher than maximum temperature",
+        });
+    }
+
+    const now = new Date().toISOString();
+    const newId = Date.now().toString();
+
+    // Check if data for this date already exists
+    const existingIndex = weatherDataStore.findIndex(
+      (item) => item.date === date,
+    );
+
+    if (existingIndex >= 0) {
+      // Update existing data
+      weatherDataStore[existingIndex] = {
+        ...weatherDataStore[existingIndex],
+        rainfall: Number(rainfall),
+        maxTemperature: Number(maxTemperature),
+        minTemperature: Number(minTemperature),
+        humidity: Number(humidity),
+        updatedAt: now,
+      };
+    } else {
+      // Add new data
+      const newWeatherData: WeatherData = {
+        id: newId,
+        date,
+        rainfall: Number(rainfall),
+        maxTemperature: Number(maxTemperature),
+        minTemperature: Number(minTemperature),
+        humidity: Number(humidity),
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      weatherDataStore.push(newWeatherData);
+    }
+
     res.json({
       success: true,
       message: "Weather data saved successfully",
-      id: Date.now().toString(),
+      id: existingIndex >= 0 ? weatherDataStore[existingIndex].id : newId,
     });
   } catch (error) {
     console.error("Error in handleAddWeatherData:", error);
