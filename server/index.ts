@@ -5,6 +5,7 @@ import {
   handleTodayWeather,
   handleWeatherHistory,
   handleAddWeatherData,
+  handleDeleteWeatherData,
 } from "./routes/weather";
 
 export function createServer() {
