@@ -1,6 +1,11 @@
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import {
+  handleTodayWeather,
+  handleWeatherHistory,
+  handleAddWeatherData,
+} from "./routes/weather";
 
 export function createServer() {
   const app = express();
@@ -16,6 +21,11 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Weather API routes
+  app.get("/api/weather/today", handleTodayWeather);
+  app.get("/api/weather/history", handleWeatherHistory);
+  app.post("/api/weather/add", handleAddWeatherData);
 
   return app;
 }
