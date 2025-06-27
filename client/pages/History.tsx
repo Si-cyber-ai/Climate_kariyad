@@ -203,15 +203,97 @@ export default function History() {
                 {weatherHistory.length} records available
               </span>
             </div>
-            <button
-              onClick={exportToCsv}
-              className="flex items-center space-x-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-            >
-              <Download className="w-4 h-4" />
-              <span className="text-sm">Export CSV</span>
-            </button>
+            <div className="flex items-center space-x-3">
+              {isAdmin ? (
+                <div className="flex items-center space-x-2 px-3 py-1 bg-green-50 border border-green-200 rounded-md">
+                  <Shield className="w-4 h-4 text-green-600" />
+                  <span className="text-sm text-green-800 font-medium">
+                    Admin Mode
+                  </span>
+                  <button
+                    onClick={() => setIsAdmin(false)}
+                    className="text-xs text-green-600 hover:text-green-800 underline"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowAdminLogin(true)}
+                  className="flex items-center space-x-2 px-3 py-2 border border-border rounded-md hover:bg-accent transition-colors"
+                >
+                  <Lock className="w-4 h-4" />
+                  <span className="text-sm">Admin Login</span>
+                </button>
+              )}
+              <button
+                onClick={exportToCsv}
+                className="flex items-center space-x-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+              >
+                <Download className="w-4 h-4" />
+                <span className="text-sm">Export CSV</span>
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* Admin Login Modal */}
+        {showAdminLogin && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg border border-border p-6 w-full max-w-md mx-4">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-8 h-8 text-primary" />
+                </div>
+                <h2 className="text-xl font-semibold text-foreground mb-2">
+                  Admin Authentication
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Enter admin password to manage weather data
+                </p>
+              </div>
+
+              <form onSubmit={handleAdminLogin} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Admin Password
+                  </label>
+                  <input
+                    type="password"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="Enter admin password"
+                    required
+                  />
+                  {adminError && (
+                    <p className="text-sm text-red-600 mt-1">{adminError}</p>
+                  )}
+                </div>
+                <div className="flex space-x-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAdminLogin(false);
+                      setAdminError("");
+                      setAdminPassword("");
+                    }}
+                    className="flex-1 px-4 py-2 border border-border rounded-md hover:bg-accent transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+                  >
+                    <Shield className="w-4 h-4" />
+                    <span>Login</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         {/* Charts */}
         {weatherHistory.length > 0 && (
