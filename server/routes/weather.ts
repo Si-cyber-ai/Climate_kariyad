@@ -67,15 +67,24 @@ export const handleTodayWeather: RequestHandler = (req, res) => {
     // Get today's date in YYYY-MM-DD format
     const today = new Date().toISOString().split("T")[0];
 
+    // Get yesterday's date
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayDate = yesterday.toISOString().split("T")[0];
+
     // Find today's and yesterday's data
-    const todayData =
-      mockWeatherData.find((d) => d.date === today) || mockWeatherData[0]; // Use first entry as fallback
-    const yesterdayData =
-      mockWeatherData.find((d) => {
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        return d.date === yesterday.toISOString().split("T")[0];
-      }) || mockWeatherData[1]; // Use second entry as fallback
+    const todayData = weatherDataStore.find((d) => d.date === today);
+    const yesterdayData = weatherDataStore.find(
+      (d) => d.date === yesterdayDate,
+    );
+
+    // If no data for today, use the most recent entry
+    const currentData =
+      todayData || weatherDataStore[weatherDataStore.length - 1];
+
+    if (!currentData) {
+      return res.status(404).json({ error: "No weather data available" });
+    }
 
     const response: WeatherResponse = {
       today: {
