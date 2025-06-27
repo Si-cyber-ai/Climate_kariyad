@@ -35,6 +35,23 @@ export default function History() {
   const [error, setError] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [adminError, setAdminError] = useState("");
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+
+  const handleAdminLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (adminPassword === "12345") {
+      setIsAdmin(true);
+      setAdminError("");
+      setShowAdminLogin(false);
+      setAdminPassword("");
+    } else {
+      setAdminError("Incorrect admin password.");
+      setAdminPassword("");
+    }
+  };
 
   useEffect(() => {
     fetchWeatherHistory();
