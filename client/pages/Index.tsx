@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { CloudRain, Thermometer, Snowflake, Droplets } from "lucide-react";
+import {
+  CloudRain,
+  Thermometer,
+  Snowflake,
+  Droplets,
+  RefreshCw,
+} from "lucide-react";
 import Layout from "@/components/Layout";
 import WeatherMetric from "@/components/WeatherMetric";
 import { WeatherResponse } from "@shared/api";
