@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import { Calendar, Download, Filter, TrendingUp } from "lucide-react";
+import { Calendar, Download, Filter, TrendingUp, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { WeatherData } from "@shared/api";
 import {
