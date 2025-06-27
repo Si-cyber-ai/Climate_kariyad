@@ -362,6 +362,33 @@ export default function History() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground tabular-nums">
                       {item.humidity}
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {deleteConfirm === item.id ? (
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => deleteWeatherData(item.id)}
+                            disabled={deleting === item.id}
+                            className="px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 disabled:opacity-50"
+                          >
+                            {deleting === item.id ? "Deleting..." : "Confirm"}
+                          </button>
+                          <button
+                            onClick={() => setDeleteConfirm(null)}
+                            className="px-2 py-1 bg-gray-300 text-gray-700 text-xs rounded hover:bg-gray-400"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setDeleteConfirm(item.id)}
+                          className="flex items-center space-x-1 px-2 py-1 text-red-600 hover:bg-red-50 rounded transition-colors"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          <span className="text-xs">Delete</span>
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
