@@ -88,25 +88,25 @@ export const handleTodayWeather: RequestHandler = (req, res) => {
 
     const response: WeatherResponse = {
       today: {
-        date: todayData.date,
+        date: currentData.date,
         rainfall: createComparison(
-          todayData.rainfall,
+          currentData.rainfall,
           yesterdayData?.rainfall || null,
         ),
         maxTemperature: createComparison(
-          todayData.maxTemperature,
+          currentData.maxTemperature,
           yesterdayData?.maxTemperature || null,
         ),
         minTemperature: createComparison(
-          todayData.minTemperature,
+          currentData.minTemperature,
           yesterdayData?.minTemperature || null,
         ),
         humidity: createComparison(
-          todayData.humidity,
+          currentData.humidity,
           yesterdayData?.humidity || null,
         ),
       },
-      lastUpdated: todayData.updatedAt,
+      lastUpdated: currentData.updatedAt,
     };
 
     res.json(response);
