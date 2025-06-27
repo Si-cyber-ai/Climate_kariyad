@@ -102,9 +102,9 @@ export default function ManualEntry() {
           </div>
         </div>
 
-        {/* Placeholder Form */}
+        {/* Working Form */}
         <div className="bg-white rounded-lg border border-border p-6">
-          <form className="space-y-6">
+          <form onSubmit={handleFormSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
@@ -112,8 +112,12 @@ export default function ManualEntry() {
                 </label>
                 <input
                   type="date"
+                  value={formData.date}
+                  onChange={(e) =>
+                    setFormData({ ...formData, date: e.target.value })
+                  }
                   className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                  disabled
+                  required
                 />
               </div>
               <div>
@@ -123,9 +127,14 @@ export default function ManualEntry() {
                 <input
                   type="number"
                   step="0.1"
+                  min="0"
                   placeholder="0.0"
+                  value={formData.rainfall}
+                  onChange={(e) =>
+                    setFormData({ ...formData, rainfall: e.target.value })
+                  }
                   className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                  disabled
+                  required
                 />
               </div>
               <div>
@@ -136,8 +145,12 @@ export default function ManualEntry() {
                   type="number"
                   step="0.1"
                   placeholder="0.0"
+                  value={formData.maxTemperature}
+                  onChange={(e) =>
+                    setFormData({ ...formData, maxTemperature: e.target.value })
+                  }
                   className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                  disabled
+                  required
                 />
               </div>
               <div>
@@ -148,8 +161,12 @@ export default function ManualEntry() {
                   type="number"
                   step="0.1"
                   placeholder="0.0"
+                  value={formData.minTemperature}
+                  onChange={(e) =>
+                    setFormData({ ...formData, minTemperature: e.target.value })
+                  }
                   className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                  disabled
+                  required
                 />
               </div>
               <div className="md:col-span-2">
@@ -162,8 +179,12 @@ export default function ManualEntry() {
                   max="100"
                   step="1"
                   placeholder="0"
+                  value={formData.humidity}
+                  onChange={(e) =>
+                    setFormData({ ...formData, humidity: e.target.value })
+                  }
                   className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                  disabled
+                  required
                 />
               </div>
             </div>
@@ -171,21 +192,26 @@ export default function ManualEntry() {
             <div className="flex justify-end">
               <button
                 type="submit"
-                disabled
+                disabled={isSubmitting}
                 className="flex items-center space-x-2 px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Save className="w-4 h-4" />
-                <span>Save Data</span>
+                <span>{isSubmitting ? "Saving..." : "Save Data"}</span>
               </button>
             </div>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              This form will include authentication and validation in the full
-              implementation.
-            </p>
-          </div>
+          {submitMessage && (
+            <div
+              className={`mt-4 p-4 rounded-lg ${
+                submitMessage.includes("success")
+                  ? "bg-green-50 border border-green-200 text-green-800"
+                  : "bg-red-50 border border-red-200 text-red-800"
+              }`}
+            >
+              <p className="text-sm">{submitMessage}</p>
+            </div>
+          )}
         </div>
       </div>
     </Layout>
