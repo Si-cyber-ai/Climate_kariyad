@@ -25,6 +25,8 @@ export default function History() {
   const [weatherHistory, setWeatherHistory] = useState<WeatherData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   useEffect(() => {
     fetchWeatherHistory();
