@@ -2,10 +2,67 @@ import Layout from "@/components/Layout";
 import { Shield, Save, Lock } from "lucide-react";
 import { useState } from "react";
 
+interface FormData {
+  date: string;
+  rainfall: string;
+  maxTemperature: string;
+  minTemperature: string;
+  humidity: string;
+}
+
 export default function ManualEntry() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
+  const [formData, setFormData] = useState<FormData>({
+    date: new Date().toISOString().split("T")[0],
+    rainfall: "",
+    maxTemperature: "",
+    minTemperature: "",
+    humidity: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitMessage("");
+
+    try {
+      const response = await fetch("/api/weather/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          date: formData.date,
+          rainfall: parseFloat(formData.rainfall),
+          maxTemperature: parseFloat(formData.maxTemperature),
+          minTemperature: parseFloat(formData.minTemperature),
+          humidity: parseInt(formData.humidity),
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitMessage("✅ Weather data saved successfully!");
+        setFormData({
+          date: new Date().toISOString().split("T")[0],
+          rainfall: "",
+          maxTemperature: "",
+          minTemperature: "",
+          humidity: "",
+        });
+      } else {
+        throw new Error("Failed to save data");
+      }
+    } catch (error) {
+      setSubmitMessage("❌ Failed to save data. Please try again.");
+      console.error("Error submitting data:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
