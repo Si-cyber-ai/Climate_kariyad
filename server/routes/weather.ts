@@ -222,3 +222,31 @@ export const handleAddWeatherData: RequestHandler = (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const handleDeleteWeatherData: RequestHandler = (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ error: "Weather data ID is required" });
+    }
+
+    // Find the index of the data to delete
+    const index = weatherDataStore.findIndex((item) => item.id === id);
+
+    if (index === -1) {
+      return res.status(404).json({ error: "Weather data not found" });
+    }
+
+    // Remove the data from the store
+    weatherDataStore.splice(index, 1);
+
+    res.json({
+      success: true,
+      message: "Weather data deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error in handleDeleteWeatherData:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
