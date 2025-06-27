@@ -6,8 +6,8 @@ import {
   WeatherComparison,
 } from "@shared/api";
 
-// Mock weather data - in a real app, this would come from a database
-const mockWeatherData: WeatherData[] = [
+// In-memory storage for weather data - in a real app, this would be a database
+let weatherDataStore: WeatherData[] = [
   {
     id: "1",
     date: "2025-01-15",
