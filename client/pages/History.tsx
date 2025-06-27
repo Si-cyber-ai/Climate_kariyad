@@ -49,6 +49,28 @@ export default function History() {
     }
   };
 
+  const deleteWeatherData = async (id: string) => {
+    try {
+      setDeleting(id);
+      const response = await fetch(`/api/weather/delete/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete data");
+      }
+
+      // Remove from local state
+      setWeatherHistory((prev) => prev.filter((item) => item.id !== id));
+      setDeleteConfirm(null);
+    } catch (error) {
+      console.error("Error deleting data:", error);
+      alert("Failed to delete data. Please try again.");
+    } finally {
+      setDeleting(null);
+    }
+  };
+
   const exportToCsv = () => {
     const headers = [
       "Date",
